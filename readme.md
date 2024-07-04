@@ -1,3 +1,5 @@
+[介绍](https://vitsumoc.github.io/%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0windows%E4%B8%8B%E7%9A%84%E5%BA%94%E7%94%A8%E7%83%AD%E5%A4%87.html)
+
 在 windows 服务器上实现 VRRP 类似的功能
 
 软件可以运行在主机或者备机
