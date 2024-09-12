@@ -114,9 +114,22 @@ func slaveProcess() {
 				"name="+ifName, "addr="+ifVAddr)
 			cmd.Run() // 这里不处理报错是因为可能重复删除
 			_isMaster = false
-			// 完成备机切回后, 需要向主机发送通知
-			time.Sleep(1 * time.Second)
-			http.Get("http://" + ifMAddr + ":" + masterPort + "/youaremaster")
+			// 考虑到主机重启后, 启动 VRRP 服务需要时间
+			// 这里多次请求，直到成功
+			for {
+				time.Sleep(5 * time.Second)
+				res, err := http.Get("http://" + ifMAddr + ":" + masterPort + "/youaremaster")
+				if err != nil {
+					continue
+				}
+				if res.StatusCode != http.StatusOK {
+					res.Body.Close()
+					continue
+				}
+				// 返回成功了，不用重试了
+				res.Body.Close()
+				break
+			}
 		}
 	}
 	// 无论是否收到回复, 每次结束时触发
